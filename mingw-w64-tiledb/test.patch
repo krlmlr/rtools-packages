@@ -1,0 +1,24 @@
+diff --git a/tiledb/sm/global_state/watchdog.cc b/tiledb/sm/global_state/watchdog.cc
+index 91ca82e4..adc31355 100644
+--- a/tiledb/sm/global_state/watchdog.cc
++++ b/tiledb/sm/global_state/watchdog.cc
+@@ -20,10 +20,16 @@ Watchdog::Watchdog() {
+ }
+
+ Watchdog::~Watchdog() {
+-  {
+-    std::unique_lock<std::mutex> lck(mtx_);
++  if (mtx_.try_lock()) {
++    // use try_lock here instead of unique_lock because
++    // - watchdog thread may be killed before main thread
++    //   while still holding mtx_ (observed on mingw-w64 w/ R)
++    // - unique_lock will hang trying to acquire
++    // - NOTE: thread_.joinable() is still true in the above
++    //         scenario, so using that will still cause hang
+     should_exit_ = true;
+     cv_.notify_one();
++    mtx_.unlock();
+   }
+   thread_.join();
+ }
+ 
