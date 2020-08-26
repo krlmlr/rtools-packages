@@ -4,7 +4,7 @@
 _realname=harfbuzz
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
-pkgver=2.6.2
+pkgver=2.7.1
 pkgrel=9500
 pkgdesc="OpenType text shaping engine (mingw-w64)"
 arch=('any')
@@ -16,10 +16,12 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
 depends=("${MINGW_PACKAGE_PREFIX}-freetype"
          "${MINGW_PACKAGE_PREFIX}-cairo")
 options=('strip' 'staticlibs')
-source=("https://www.freedesktop.org/software/harfbuzz/release/${_realname}-${pkgver}.tar.xz")
-sha256sums=('3b4c6a72f7f2b05d54f6c3112b3ebee5131c199fe4de4cf9bbbf71a56666f624')
+source=("https://github.com/harfbuzz/harfbuzz/archive/${pkgver}.tar.gz")
+sha256sums=('431c856ff18eeca89b2a36b58f2c2d56273cd522c34c0ffbc9dd6f7da4b9bd08')
+noextract=("${pkgver}.tar.gz")
 
 prepare() {
+  MSYS="winsymlinks:lnk" tar -xzf ${srcdir}/${pkgver}.tar.gz -C ${srcdir}
   cd "${srcdir}/${_realname}-${pkgver}"
   #autoreconf -fi
 }
