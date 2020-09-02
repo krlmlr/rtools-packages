@@ -72,9 +72,5 @@ Rtools40 will never install anything outside of your rtools40 installation direc
 
 To speed up repetitive builds during packaging, install and enable `ccache`:
 
-1. mingw64
-    1. Install it in the mingw64 shell with `pacman -S mingw-w64-x86_64-ccache`
-    1. Edit `/etc/makepkg_mingw64.conf`, add a line containing `PATH="/mingw64/lib/ccache/bin:${PATH}"`
-1. mingw32
-    1. Install it in the mingw32 shell with `pacman -S mingw-w64-i686-ccache`
-    1. Edit `/etc/makepkg_mingw32.conf`, add a line containing `PATH="/mingw32/lib/ccache/bin:${PATH}"`
+1. Install it in the mingw64 shell with `pacman -S mingw-w64-{x86_64,i686}-ccache`
+1. Edit `/etc/makepkg_mingw64.conf` and  `/etc/makepkg_mingw32.conf`, add a line containing `PATH="{MINGW_PREFIX}/lib/ccache/bin:${PATH}"` to both files
